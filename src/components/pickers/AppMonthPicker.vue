@@ -11,6 +11,7 @@
             v-model="displayPicker"
             allow-overflow
             offset-y
+            :close-on-content-click="false"
         >
           <template v-slot:activator="{ on, attrs }">
             <div class="text-center" :style="textStyle" v-bind="attrs" v-on="on">
@@ -37,37 +38,39 @@
   </v-container>
 </template>
 
-<script>
+<script lang="ts">
 import { defineComponent, ref, computed } from '@vue/composition-api'
 import moment from 'moment'
 
-const dataController = ({ initDate, emit }) => {
-  const displayPicker = ref(false)
-  const value = ref(moment(initDate).format('YYYY-MM'))
+const valueRegex = /\d{4}-\d{2}/
 
-  const dateValue = computed(() => moment(value.value, 'YYYY-MM'))
+const dataController = ({ value, emit }) => {
+  const displayPicker = ref(false)
+  const selectedValue = ref(moment(value).format('YYYY-MM'))
+
+  const dateValue = computed(() => moment(selectedValue.value, 'YYYY-MM'))
   const selectedYear = computed(() => dateValue.value.year())
   const selectedMonth = computed(() => dateValue.value.month() + 1);
 
   const onChange = (value) => {
-    const date = moment(value, 'YYYY-MM')
-
+    selectedValue.value = value
     displayPicker.value = false
-    emit('onChange', { year: date.year(), month: date.month() })
+
+    emit('input', value)
   }
 
   const previous = () => {
-    value.value = dateValue.value.add(-1, 'month').format('YYYY-MM')
+    selectedValue.value = dateValue.value.add(-1, 'month').format('YYYY-MM')
 
-    onChange(value.value)
+    onChange(selectedValue.value)
   }
   const next = () => {
-    value.value = dateValue.value.add(1, 'month').format('YYYY-MM')
+    selectedValue.value = dateValue.value.add(1, 'month').format('YYYY-MM')
 
-    onChange(value.value)
+    onChange(selectedValue.value)
   }
 
-  return { displayPicker, value, selectedYear, selectedMonth, onChange, previous, next  }
+  return { displayPicker, selectedYear, selectedMonth, onChange, previous, next  }
 }
 
 const styleController = ({ maxWidth, fontSize, textColor }) => {
@@ -79,12 +82,13 @@ const styleController = ({ maxWidth, fontSize, textColor }) => {
 
 export default defineComponent({
   name: 'AppMonthPicker',
-  emits: [ 'onChange' ],
   props: {
-    initDate: {
-      type: Date,
-      default: new Date(),
-      required: false
+    value: {
+      type: String,
+      required: true,
+      validator(value) {
+        return valueRegex.test(value)
+      }
     },
     maxWidth: {
       type: String,
@@ -110,7 +114,7 @@ export default defineComponent({
   setup(props, { emit }) {
     return {
       ...dataController({
-        initDate: props.initDate,
+        initDate: props.value,
         emit
       }),
       ...styleController({
