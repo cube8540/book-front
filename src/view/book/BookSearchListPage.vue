@@ -61,8 +61,8 @@ import BookDetailCard from '@/components/books/BookDetailCard.vue'
 import AppMonthPicker from '@/components/pickers/AppMonthPicker.vue'
 
 interface SelectablePublisher {
-  code?: String,
-  name?: String
+  code?: string | null,
+  name?: string
 }
 
 function convertContent(content: Array<BookSearchResponse> | undefined): Array<BookDetailCardDefine> {
@@ -107,7 +107,7 @@ export default defineComponent({
 
     onFetchPage()
     getAll().then(v => {
-      const selectable = [{ code: null, name: '전체' }]
+      const selectable: Array<SelectablePublisher> = [{ code: null, name: '전체' }]
 
       v.data.results.forEach((publisher: PublisherElement) => {
         selectable.push({ code: publisher.code, name: publisher.name })

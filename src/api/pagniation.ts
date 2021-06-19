@@ -1,28 +1,28 @@
 export interface Sort {
-    sorted: Boolean,
-    unsorted: Boolean,
-    empty: Boolean
+    sorted: boolean,
+    unsorted: boolean,
+    empty: boolean
 }
 
 export interface Pageable {
     sort: Sort,
-    offset: Number,
-    pageNumber: Number,
-    pageSize: Number,
-    paged: Boolean,
-    unpaged: Boolean
+    offset: number,
+    pageNumber: number,
+    pageSize: number,
+    paged: boolean,
+    unpaged: boolean
 }
 
 export interface Pagination<T> {
     content: Array<T>,
     pageable: Pageable,
-    last: Boolean,
-    totalPages: Number,
-    totalElements: Number,
-    size: Number,
-    number: Number,
+    last: boolean,
+    totalPages: number,
+    totalElements: number,
+    size: number,
+    number: number,
     sort: Sort,
-    first: Boolean,
-    numberOfElements: Number,
-    empty: Boolean
+    first: boolean,
+    numberOfElements: number,
+    empty: boolean
 }

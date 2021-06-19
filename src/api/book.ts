@@ -6,30 +6,30 @@ import { Pagination } from '@/api/pagniation'
 import { AxiosResponse } from "axios"
 
 export interface BookSearchRequest {
-    publishFrom?: Date | String | moment.Moment,
-    publishTo?: Date | String | moment.Moment,
-    seriesIsbn?: String,
-    seriesCode?: String,
-    publisherCode?: String,
+    publishFrom?: Date | string | moment.Moment,
+    publishTo?: Date | string | moment.Moment,
+    seriesIsbn?: string,
+    seriesCode?: string,
+    publisherCode?: string,
     direction?: 'ASC' | 'DESC',
-    page?: Number,
-    size?: Number
+    page?: number,
+    size?: number
 }
 
 export interface BookSearchResponse {
-    isbn: String,
-    title: String,
+    isbn: string,
+    title: string,
     publishDate: Date,
-    publisherCode: String,
-    publisherName: String,
-    seriesIsbn?: String,
-    seriesCode?: String,
-    largeThumbnail?: String,
-    mediumThumbnail?: String,
-    smallThumbnail?: String,
-    authors?: Array<String>,
-    description?: String,
-    price?: Number,
+    publisherCode: string,
+    publisherName: string,
+    seriesIsbn?: string,
+    seriesCode?: string,
+    largeThumbnail?: string,
+    mediumThumbnail?: string,
+    smallThumbnail?: string,
+    authors?: Array<string>,
+    description?: string,
+    price?: number,
     createdAt?: Date,
     updatedAt?: Date
 }

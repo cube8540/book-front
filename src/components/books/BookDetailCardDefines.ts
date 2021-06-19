@@ -1,11 +1,11 @@
 import moment from 'moment';
 
 export interface BookDetailCardDefine {
-    isbn: String,
-    title: String,
-    publisher: String,
-    publishDate: Date | moment.Moment | String,
-    thumbnail?: String,
-    description?: String,
-    authors?: Array<String>
+    isbn: string,
+    title: string,
+    publisher: string,
+    publishDate: Date | moment.Moment | string,
+    thumbnail?: string,
+    description?: string,
+    authors?: Array<string>
 }

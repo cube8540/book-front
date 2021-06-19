@@ -3,8 +3,8 @@ import http from '@/api/http'
 import { AxiosResponse } from 'axios'
 
 export interface PublisherElement {
-    code: String,
-    name: String,
+    code: string,
+    name: string,
     createdAt?: Date,
     updatedAt?: Date
 }

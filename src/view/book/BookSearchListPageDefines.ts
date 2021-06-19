@@ -5,18 +5,18 @@ import moment from 'moment'
 import { BookSearchRequest } from '@/api/book'
 
 export function searchConditionDefine(initDate: moment.Moment) {
-    const selectedYearMonth: Ref<String> = ref(initDate.format('YYYY-MM'))
+    const selectedYearMonth: Ref<string> = ref(initDate.format('YYYY-MM'))
 
-    const selectedPublisherCode: Ref<String | undefined> = ref(undefined)
+    const selectedPublisherCode: Ref<string | undefined> = ref(undefined)
 
-    const selectedPage: Ref<Number | undefined> = ref(1)
-    const selectedSize: Ref<Number | undefined> = ref(20)
+    const selectedPage: Ref<number | undefined> = ref(1)
+    const selectedSize: Ref<number | undefined> = ref(20)
 
     const publishFrom: ComputedRef<moment.Moment | undefined> = computed(() => {
-        return moment(selectedYearMonth.value.toString(), 'YYYY-MM').clone().startOf('month')
+        return moment(selectedYearMonth.value, 'YYYY-MM').clone().startOf('month')
     })
     const publishTo: ComputedRef<moment.Moment | undefined> = computed(() => {
-        return moment(selectedYearMonth.value.toString(), 'YYYY-MM').clone().endOf('month')
+        return moment(selectedYearMonth.value, 'YYYY-MM').clone().endOf('month')
     })
 
     const searchParams: ComputedRef<BookSearchRequest> = computed(() => ({

@@ -39,24 +39,29 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from '@vue/composition-api'
+import { defineComponent, ref, computed, Ref, PropType, SetupContext } from '@vue/composition-api'
 import moment from 'moment'
 
 const valueRegex = /\d{4}-\d{2}/
 
-const dataController = ({ value, emit }) => {
-  const displayPicker = ref(false)
-  const selectedValue = ref(moment(value).format('YYYY-MM'))
+interface DataControllerDefine {
+  value: string,
+  emit: any
+}
+
+const dataController = (props: DataControllerDefine) => {
+  const displayPicker: Ref<boolean> = ref(false)
+  const selectedValue: Ref<string> = ref(moment(props.value).format('YYYY-MM'))
 
   const dateValue = computed(() => moment(selectedValue.value, 'YYYY-MM'))
   const selectedYear = computed(() => dateValue.value.year())
   const selectedMonth = computed(() => dateValue.value.month() + 1);
 
-  const onChange = (value) => {
+  const onChange = (value: string) => {
     selectedValue.value = value
     displayPicker.value = false
 
-    emit('input', value)
+    props.emit('input', value)
   }
 
   const previous = () => {
@@ -73,9 +78,15 @@ const dataController = ({ value, emit }) => {
   return { displayPicker, selectedYear, selectedMonth, onChange, previous, next  }
 }
 
-const styleController = ({ maxWidth, fontSize, textColor }) => {
-  const contentStyle = ref(`max-width: ${maxWidth}`)
-  const textStyle = ref(`font-size: ${fontSize}; color: ${textColor}`)
+interface StyleControllerDefine {
+  maxWidth: string,
+  fontSize: string,
+  textColor: string
+}
+
+const styleController = (props: StyleControllerDefine) => {
+  const contentStyle = ref(`max-width: ${props.maxWidth}`)
+  const textStyle = ref(`font-size: ${props.fontSize}; color: ${props.textColor}`)
 
   return { contentStyle, textStyle }
 }
@@ -86,7 +97,7 @@ export default defineComponent({
     value: {
       type: String,
       required: true,
-      validator(value) {
+      validator(value: string) {
         return valueRegex.test(value)
       }
     },
@@ -106,16 +117,16 @@ export default defineComponent({
       required: false
     },
     buttonSize: {
-      type: String | Number,
+      type: Object as PropType<string | number>,
       default: '20px',
       required: false,
     }
   },
-  setup(props, { emit }) {
+  setup(props: { value: string, maxWidth: string, fontSize: string, textColor: string, buttonSize: string | number }, context: SetupContext) {
     return {
       ...dataController({
-        initDate: props.value,
-        emit
+        value: props.value,
+        emit: context.emit
       }),
       ...styleController({
         maxWidth: props.maxWidth,
