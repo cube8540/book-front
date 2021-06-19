@@ -6,7 +6,6 @@
           :width="thumbnailWidth"
           :height="thumbnailHeight"
           :src="bookDetails.thumbnail"
-          :lazy-src="bookDetails.thumbnail"
         >
           <template #placeholder>
             <v-row
