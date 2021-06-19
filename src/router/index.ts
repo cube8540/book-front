@@ -1,16 +1,16 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 
-import HelloWorld from '@/components/HelloWorld.vue';
+import BookSearchListPage from '@/view/book/BookSearchListPage.vue'
 
 Vue.use(VueRouter)
 const router = new VueRouter({
     routes: [{
         path: '/',
-        redirect: '/Hello'
+        redirect: '/search'
     }, {
-        path: '/hello',
-        component: HelloWorld
+        path: '/search',
+        component: BookSearchListPage
     }]
 })
 export default router
