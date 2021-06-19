@@ -1,9 +1,9 @@
 import Vue from 'vue'
 import VueCompositionAPI from '@vue/composition-api'
 
-import App from './App.vue'
+import App from '@/App.vue'
 
-import vuetify from './plugins/vuetify'
+import vuetify from '@/plugins/vuetify'
 
 import store from '@/store'
 import router from '@/router'
