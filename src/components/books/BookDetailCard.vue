@@ -5,8 +5,8 @@
         <v-img
           :width="thumbnailWidth"
           :height="thumbnailHeight"
-          :src="thumbnail"
-          :lazy-src="thumbnail"
+          :src="bookDetails.thumbnail"
+          :lazy-src="bookDetails.thumbnail"
         >
           <template #placeholder>
             <v-row
@@ -24,65 +24,43 @@
         </v-img>
       </div>
       <div class="align-self-stretch">
-        <v-card-title>{{ title }}</v-card-title>
+        <v-card-title>{{ bookDetails.title }}</v-card-title>
         <v-card-subtitle class="d-flex">
           <span class="d-inline-block text-no-wrap">
-            {{ publisher }}
+            {{ bookDetails.publisher }}
           </span>
           <v-divider class="mx-2" vertical></v-divider>
           <span class="d-inline-block text-no-wrap">
-            {{ publishDate }}
+            {{ formattedPublishDate }}
           </span>
           <v-divider class="mx-2" vertical></v-divider>
-          <template v-for="(author, index) in authors">
+          <template v-for="(author, index) in bookDetails.authors">
             <span class="d-inline-block text-no-wrap" :key="index">
               {{ author }}
             </span>
-            <v-divider class="mx-2" vertical v-if="index < (authors.length - 1)" :key="index"></v-divider>
+            <v-divider class="mx-2" vertical v-if="index < (bookDetails.authors.length - 1)" :key="index"></v-divider>
           </template>
         </v-card-subtitle>
         <v-card-text>
-          {{ displayDescription }}
+          {{ formattedDescription }}
         </v-card-text>
       </div>
     </div>
   </v-card>
 </template>
 
-<script>
-import { defineComponent, ref } from '@vue/composition-api'
+<script lang="ts">
+import { PropType, defineComponent, computed } from '@vue/composition-api'
+
+import moment from 'moment';
+import { BookDetailCardDefine } from '@/components/books/BookDetailCardDefines';
 
 export default defineComponent({
   name: 'BookDetailCard',
   props: {
-    isbn: {
-      type: String,
+    bookDetails: {
+      type: Object as PropType<BookDetailCardDefine>,
       required: true
-    },
-    title: {
-      type: String,
-      required: true
-    },
-    publisher: {
-      type: String,
-      required: true
-    },
-    publishDate: {
-      type: String,
-      required: true
-    },
-    thumbnail: {
-      type: String,
-      required: false
-    },
-    description: {
-      type: String,
-      required: false
-    },
-    authors: {
-      type: Array,
-      default: [],
-      required: false
     },
     maxDescriptionLength: {
       type: Number,
@@ -101,13 +79,29 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const displayDescription = ref(props.description)
+    const formattedPublishDate = computed(() => {
+      if (props.bookDetails.publishDate instanceof Date) {
+        return moment(props.bookDetails.publishDate).format('YYYY-MM-DD')
+      } else if (moment.isMoment(props.bookDetails.publishDate)) {
+        return props.bookDetails.publishDate.format('YYYY-MM-DD')
+      } else {
+        return props.bookDetails.publishDate
+      }
+    })
 
-    if (displayDescription.value && displayDescription.value.length > props.maxDescriptionLength) {
-      displayDescription.value = displayDescription.value.substring(0, props.maxDescriptionLength) + '...'
+    const maxDescriptionLength = props.maxDescriptionLength
+    const formattedDescription = computed(() => {
+      if (props.bookDetails.description && props.bookDetails.description.length > maxDescriptionLength) {
+        return props.bookDetails.description.substring(0, maxDescriptionLength) + '...'
+      } else {
+        return props.bookDetails.description
+      }
+    })
+
+    return {
+      formattedDescription,
+      formattedPublishDate
     }
-
-    return { displayDescription }
   }
 })
 </script>
