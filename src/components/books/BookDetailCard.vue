@@ -3,20 +3,20 @@
     <div class="d-flex align-center">
       <div class="pa-2">
         <v-img
-          :width="thumbnailWidth"
-          :height="thumbnailHeight"
-          :src="bookDetails.thumbnail"
-          :lazy-src="bookDetails.thumbnail"
+            :width="thumbnailWidth"
+            :height="thumbnailHeight"
+            :src="bookDetails.thumbnail"
+            :lazy-src="bookDetails.thumbnail"
         >
           <template #placeholder>
             <v-row
-              class="fill-height ma-0"
-              align="center"
-              justify="center"
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
             >
               <v-progress-circular
-                indeterminate
-                color="grey lighten-5"
+                  indeterminate
+                  color="grey lighten-5"
               >
               </v-progress-circular>
             </v-row>
@@ -35,10 +35,19 @@
           </span>
           <v-divider class="mx-2" vertical></v-divider>
           <template v-for="(author, index) in bookDetails.authors">
-            <span class="d-inline-block text-no-wrap" :key="index">
+            <span
+                class="d-inline-block text-no-wrap"
+                :key="bookDetails.isbn + '_author_' + index"
+            >
               {{ author }}
             </span>
-            <v-divider class="mx-2" vertical v-if="index < (bookDetails.authors.length - 1)" :key="index"></v-divider>
+            <v-divider
+                class="mx-2"
+                v-if="index < (bookDetails.authors.length - 1)"
+                :key="bookDetails.isbn + '_divider_' + index"
+                vertical
+            >
+            </v-divider>
           </template>
         </v-card-subtitle>
         <v-card-text>
