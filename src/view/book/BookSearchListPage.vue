@@ -34,9 +34,9 @@
     <v-row v-if="fetchedPage" align="center" justify="center">
       <v-col cols="12">
         <v-pagination
-            v-model="selectedPage"
-            :length="fetchedPage.totalPages"
-            @input="onFetchPage"
+          v-model="selectedPage"
+          :length="fetchedPage.totalPages"
+          @input="onFetchPage"
         >
         </v-pagination>
       </v-col>

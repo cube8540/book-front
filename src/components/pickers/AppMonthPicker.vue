@@ -8,10 +8,10 @@
       </v-col>
       <v-col cols="8">
         <v-menu
-            v-model="displayPicker"
-            allow-overflow
-            offset-y
-            :close-on-content-click="false"
+          v-model="displayPicker"
+          allow-overflow
+          offset-y
+          :close-on-content-click="false"
         >
           <template v-slot:activator="{ on, attrs }">
             <div class="text-center" :style="textStyle" v-bind="attrs" v-on="on">
@@ -20,11 +20,11 @@
             </div>
           </template>
           <v-date-picker
-              v-model="value"
-              type="month"
-              no-title
-              scrollable
-              @input="onChange"
+            v-model="value"
+            type="month"
+            no-title
+            scrollable
+            @input="onChange"
           >
           </v-date-picker>
         </v-menu>
