@@ -57,14 +57,12 @@ const dataController = ({ initDate, emit }) => {
   }
 
   const previous = () => {
-    dateValue.value = dateValue.value.add(-1, 'month')
-    value.value = dateValue.value.format('YYYY-MM')
+    value.value = dateValue.value.add(-1, 'month').format('YYYY-MM')
 
     onChange(value.value)
   }
   const next = () => {
-    dateValue.value = dateValue.value.add(1, 'month')
-    value.value = dateValue.value.format('YYYY-MM')
+    value.value = dateValue.value.add(1, 'month').format('YYYY-MM')
 
     onChange(value.value)
   }
