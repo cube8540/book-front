@@ -20,7 +20,7 @@
             </div>
           </template>
           <v-date-picker
-            v-model="value"
+            v-model="selectedValue"
             type="month"
             no-title
             scrollable
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, Ref, PropType, SetupContext } from '@vue/composition-api'
+import { defineComponent, ref, computed, Ref, SetupContext } from '@vue/composition-api'
 import moment from 'moment'
 
 const valueRegex = /\d{4}-\d{2}/
@@ -75,7 +75,7 @@ const dataController = (props: DataControllerDefine) => {
     onChange(selectedValue.value)
   }
 
-  return { displayPicker, selectedYear, selectedMonth, onChange, previous, next  }
+  return { displayPicker, selectedValue, selectedYear, selectedMonth, onChange, previous, next  }
 }
 
 interface StyleControllerDefine {
@@ -117,12 +117,12 @@ export default defineComponent({
       required: false
     },
     buttonSize: {
-      type: Object as PropType<string | number>,
+      type: String,
       default: '20px',
       required: false,
     }
   },
-  setup(props: { value: string, maxWidth: string, fontSize: string, textColor: string, buttonSize: string | number }, context: SetupContext) {
+  setup(props: { value: string, maxWidth: string, fontSize: string, textColor: string, buttonSize: string }, context: SetupContext) {
     return {
       ...dataController({
         value: props.value,

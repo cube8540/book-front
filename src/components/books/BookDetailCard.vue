@@ -6,7 +6,6 @@
           :width="thumbnailWidth"
           :height="thumbnailHeight"
           :src="bookDetails.thumbnail"
-          :lazy-src="bookDetails.thumbnail"
         >
           <template #placeholder>
             <v-row
@@ -33,7 +32,7 @@
           <span class="d-inline-block text-no-wrap">
             {{ formattedPublishDate }}
           </span>
-          <v-divider class="mx-2" vertical></v-divider>
+          <v-divider class="mx-2" v-if="bookDetails.authors && bookDetails.authors.length > 0" vertical></v-divider>
           <template v-for="(author, index) in bookDetails.authors">
             <span
               class="d-inline-block text-no-wrap"
