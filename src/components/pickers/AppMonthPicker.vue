@@ -20,7 +20,7 @@
             </div>
           </template>
           <v-date-picker
-            v-model="value"
+            v-model="selectedValue"
             type="month"
             no-title
             scrollable
@@ -75,7 +75,7 @@ const dataController = (props: DataControllerDefine) => {
     onChange(selectedValue.value)
   }
 
-  return { displayPicker, selectedYear, selectedMonth, onChange, previous, next  }
+  return { displayPicker, selectedValue, selectedYear, selectedMonth, onChange, previous, next  }
 }
 
 interface StyleControllerDefine {
