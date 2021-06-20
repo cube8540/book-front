@@ -45,7 +45,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed, ComputedRef, ref, Ref } from '@vue/composition-api'
+import { defineComponent, computed, ComputedRef, ref, Ref, SetupContext } from '@vue/composition-api'
 
 import moment from "moment";
 
@@ -86,7 +86,7 @@ export default defineComponent({
     BookDetailCard,
     AppMonthPicker,
   },
-  setup() {
+  setup(props, context: SetupContext) {
     const conditionDefine = searchConditionDefine(moment())
 
     const selectablePublishers: Ref<Array<SelectablePublisher>> = ref([])
@@ -98,7 +98,7 @@ export default defineComponent({
     const onFetchPage = () => {
       search(conditionDefine.searchParams.value)
           .then(v => fetchedPage.value = v.data)
-      window.scrollTo(0, 0)
+      context.root.$vuetify.goTo(0)
     }
     const onChangeConditionDefine = () => {
       conditionDefine.selectedPage.value = 1
