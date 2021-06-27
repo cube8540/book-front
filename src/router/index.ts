@@ -5,6 +5,7 @@ import BookSearchListPage from '@/view/book/BookSearchListPage.vue'
 
 Vue.use(VueRouter)
 const router = new VueRouter({
+    mode: 'history',
     routes: [{
         path: '/',
         redirect: '/search'
