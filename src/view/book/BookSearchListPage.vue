@@ -109,9 +109,9 @@ export default defineComponent({
 
     const onFetchPage = () => {
       pushRouteQuery()
+      window.scrollTo(0, 0)
       search(conditionDefine.searchParams.value)
           .then(v => fetchedPage.value = v.data)
-      context.root.$vuetify.goTo(0)
     }
 
     const onChangeConditionDefine = () => {
