@@ -37,7 +37,7 @@ export function extractQueryParams(route: Route): BookSearchRequestQueryParams {
         result.page = 1
     }
     if (queryParamMap.publisherCode) {
-        result.yearMonth = queryParamMap.publisherCode.toString()
+        result.publisherCode = queryParamMap.publisherCode.toString()
     }
     if (queryParamMap.yearMonth && /\d{6}/.test(queryParamMap.yearMonth.toString())) {
         result.yearMonth = moment(queryParamMap.yearMonth.toString(), 'YYYYMM').format('YYYY-MM')

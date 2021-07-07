@@ -1,6 +1,6 @@
 {
   "name": "book-front",
-  "version": "0.5.2",
+  "version": "0.5.2-HOTFIX",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve --mode localhost",
