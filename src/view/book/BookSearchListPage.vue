@@ -8,7 +8,7 @@
       </app-month-picker>
     </v-row>
     <v-row align="center" justify="end">
-      <v-col cols="2">
+      <v-col lg="2" cols="4">
         <v-select
           v-model="selectedPublisherCode"
           label="출판사"
@@ -49,7 +49,7 @@ import { defineComponent, computed, ComputedRef, ref, Ref, SetupContext } from '
 
 import moment from "moment";
 
-import { searchConditionDefine } from '@/view/book/BookSearchListPageDefines'
+import { searchConditionDefine, extractQueryParams, convertQueryParams } from '@/view/book/BookSearchListPageDefines'
 
 import { BookSearchResponse, search } from '@/api/book'
 import { PublisherElement, getAll } from '@/api/publisher'
@@ -88,24 +88,37 @@ export default defineComponent({
   },
   setup(props, context: SetupContext) {
     const conditionDefine = searchConditionDefine(moment())
+    const queryParams = extractQueryParams(context.root.$route)
 
     const selectablePublishers: Ref<Array<SelectablePublisher>> = ref([])
+
+    conditionDefine.selectedPage.value = queryParams.page
+    conditionDefine.selectedPublisherCode.value = queryParams.publisherCode
+    if (queryParams.yearMonth) {
+      conditionDefine.selectedYearMonth.value = queryParams.yearMonth
+    }
 
     const fetchedPage: Ref<Pagination<BookSearchResponse> | undefined> = ref(undefined)
     const fetchedContent: ComputedRef<Array<BookDetailCardDefine>> =
         computed(() => convertContent(fetchedPage.value?.content))
 
+    const pushRouteQuery = () => {
+      const queryParams = convertQueryParams(conditionDefine.searchParams.value)
+      context.root.$router.replace({ query: queryParams })
+    }
+
     const onFetchPage = () => {
+      pushRouteQuery()
+      window.scrollTo(0, 0)
       search(conditionDefine.searchParams.value)
           .then(v => fetchedPage.value = v.data)
-      context.root.$vuetify.goTo(0)
     }
+
     const onChangeConditionDefine = () => {
       conditionDefine.selectedPage.value = 1
       onFetchPage()
     }
 
-    onFetchPage()
     getAll().then(v => {
       const selectable: Array<SelectablePublisher> = [{ code: null, name: '전체' }]
 
@@ -116,6 +129,7 @@ export default defineComponent({
       selectablePublishers.value = selectable
     })
 
+    onFetchPage()
     return {
       ...conditionDefine,
       fetchedPage,
