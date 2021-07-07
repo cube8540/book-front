@@ -8,7 +8,7 @@
       </app-month-picker>
     </v-row>
     <v-row align="center" justify="end">
-      <v-col cols="2">
+      <v-col lg="2" cols="4">
         <v-select
           v-model="selectedPublisherCode"
           label="출판사"
@@ -104,7 +104,7 @@ export default defineComponent({
 
     const pushRouteQuery = () => {
       const queryParams = convertQueryParams(conditionDefine.searchParams.value)
-      context.root.$router.push({ query: queryParams })
+      context.root.$router.replace({ query: queryParams })
     }
 
     const onFetchPage = () => {

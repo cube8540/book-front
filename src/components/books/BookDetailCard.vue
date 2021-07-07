@@ -25,29 +25,13 @@
       <div class="align-self-stretch">
         <v-card-title>{{ bookDetails.title }}</v-card-title>
         <v-card-subtitle class="d-flex">
-          <span class="d-inline-block text-no-wrap">
+          <span>
             {{ bookDetails.publisher }}
           </span>
           <v-divider class="mx-2" vertical></v-divider>
-          <span class="d-inline-block text-no-wrap">
+          <span>
             {{ formattedPublishDate }}
           </span>
-          <v-divider class="mx-2" v-if="bookDetails.authors && bookDetails.authors.length > 0" vertical></v-divider>
-          <template v-for="(author, index) in bookDetails.authors">
-            <span
-              class="d-inline-block text-no-wrap"
-              :key="bookDetails.isbn + '_author_' + index"
-            >
-              {{ author }}
-            </span>
-            <v-divider
-              class="mx-2"
-              v-if="index < (bookDetails.authors.length - 1)"
-              :key="bookDetails.isbn + '_divider_' + index"
-              vertical
-            >
-            </v-divider>
-          </template>
         </v-card-subtitle>
         <v-card-text>
           {{ formattedDescription }}
