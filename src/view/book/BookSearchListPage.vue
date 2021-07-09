@@ -38,8 +38,13 @@
       :key="content.isbn"
     >
       <v-col cols="12">
-        <book-detail-card :book-details="content">
-        </book-detail-card>
+        <v-hover v-slot="{ hover }">
+          <book-detail-card
+            :hover="hover"
+            :book-details="content"
+          >
+          </book-detail-card>
+        </v-hover>
       </v-col>
     </v-row>
     <v-row v-if="fetchedPage" align="center" justify="center">

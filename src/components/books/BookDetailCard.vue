@@ -1,5 +1,5 @@
 <template>
-  <v-card elevation="2" outlined>
+  <v-card :elevation="hoverElevation">
     <div class="d-flex align-center">
       <div class="pa-2">
         <v-img
@@ -68,6 +68,11 @@ export default defineComponent({
       type: String,
       default: '220px',
       required: false
+    },
+    hover: {
+      type: Boolean,
+      default: false,
+      required: false
     }
   },
   setup(props) {
@@ -90,9 +95,11 @@ export default defineComponent({
       }
     })
 
+    const hoverElevation = computed(() => props.hover ? 16 : 2)
     return {
       formattedDescription,
-      formattedPublishDate
+      formattedPublishDate,
+      hoverElevation
     }
   }
 })
