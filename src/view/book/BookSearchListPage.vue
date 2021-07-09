@@ -51,7 +51,7 @@ import moment from "moment";
 
 import { searchConditionDefine, extractQueryParams, convertQueryParams } from '@/view/book/BookSearchListPageDefines'
 
-import { BookSearchResponse, search } from '@/api/book'
+import { BookDetailsResponse, search } from '@/api/book'
 import { PublisherElement, getAll } from '@/api/publisher'
 import { Pagination } from '@/api/pagniation'
 
@@ -65,7 +65,7 @@ interface SelectablePublisher {
   name?: string
 }
 
-function convertContent(content: Array<BookSearchResponse> | undefined): Array<BookDetailCardDefine> {
+function convertContent(content: Array<BookDetailsResponse> | undefined): Array<BookDetailCardDefine> {
   if (!content || content.length === 0) {
     return []
   }
@@ -98,7 +98,7 @@ export default defineComponent({
       conditionDefine.selectedYearMonth.value = queryParams.yearMonth
     }
 
-    const fetchedPage: Ref<Pagination<BookSearchResponse> | undefined> = ref(undefined)
+    const fetchedPage: Ref<Pagination<BookDetailsResponse> | undefined> = ref(undefined)
     const fetchedContent: ComputedRef<Array<BookDetailCardDefine>> =
         computed(() => convertContent(fetchedPage.value?.content))
 

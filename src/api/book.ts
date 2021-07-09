@@ -16,7 +16,7 @@ export interface BookSearchRequest {
     size?: number
 }
 
-export interface BookSearchResponse {
+export interface BookDetailsResponse {
     isbn: string,
     title: string,
     publishDate: Date,
@@ -34,7 +34,7 @@ export interface BookSearchResponse {
     updatedAt?: Date
 }
 
-export async function search(request: BookSearchRequest): Promise<AxiosResponse<Pagination<BookSearchResponse>>> {
+export async function search(request: BookSearchRequest): Promise<AxiosResponse<Pagination<BookDetailsResponse>>> {
     const requestCopy = { ...request };
 
     if (!requestCopy.direction) {
@@ -53,5 +53,5 @@ export async function search(request: BookSearchRequest): Promise<AxiosResponse<
         requestCopy.publishTo = requestCopy.publishTo.format('YYYYMMDD')
     }
 
-    return http.get<Pagination<BookSearchResponse>>('/v1/books', { params: requestCopy })
+    return http.get<Pagination<BookDetailsResponse>>('/v1/books', { params: requestCopy })
 }
