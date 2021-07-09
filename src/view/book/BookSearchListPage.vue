@@ -8,7 +8,18 @@
       </app-month-picker>
     </v-row>
     <v-row align="center" justify="end">
-      <v-col lg="2" cols="4">
+      <v-col
+        v-if="isShowPagination"
+        cols="8"
+        class="d-md-flex d-none justify-center">
+        <v-pagination
+            v-model="selectedPage"
+            :length="fetchedPage.totalPages"
+            @input="onFetchPage"
+        >
+        </v-pagination>
+      </v-col>
+      <v-col md="2" cols="4">
         <v-select
           v-model="selectedPublisherCode"
           label="출판사"
@@ -32,8 +43,9 @@
       </v-col>
     </v-row>
     <v-row v-if="fetchedPage" align="center" justify="center">
-      <v-col cols="12">
+      <v-col lg="12" cols="8">
         <v-pagination
+          v-if="isShowPagination"
           v-model="selectedPage"
           :length="fetchedPage.totalPages"
           @input="onFetchPage"
@@ -129,12 +141,15 @@ export default defineComponent({
       selectablePublishers.value = selectable
     })
 
+    const isShowPagination: ComputedRef<boolean> = computed(() => fetchedContent.value && fetchedContent.value.length > 0)
+
     onFetchPage()
     return {
       ...conditionDefine,
       fetchedPage,
       fetchedContent,
       selectablePublishers,
+      isShowPagination,
       onFetchPage,
       onChangeConditionDefine
     }
