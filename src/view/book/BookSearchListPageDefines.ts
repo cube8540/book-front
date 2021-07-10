@@ -90,3 +90,27 @@ export function searchConditionDefine(initDate: moment.Moment) {
         searchParams,
     }
 }
+
+export function showBookDetailViewerDefine() {
+    const selectedBookIsbn: Ref<string | undefined> = ref(undefined)
+    const isShowDetailDialog: Ref<boolean> = ref(false)
+
+    const onClickBookDetail = (isbn: string) => {
+        selectedBookIsbn.value = isbn
+        isShowDetailDialog.value = true
+    }
+
+    const onInputBookDetailViewerDialog = (input: boolean) => {
+        if (!input) {
+            selectedBookIsbn.value = undefined
+        }
+        isShowDetailDialog.value = input
+    }
+
+    return {
+        selectedBookIsbn,
+        isShowDetailDialog,
+        onClickBookDetail,
+        onInputBookDetailViewerDialog,
+    }
+}

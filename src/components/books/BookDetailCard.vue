@@ -1,5 +1,5 @@
 <template>
-  <v-card :elevation="hoverElevation">
+  <v-card :elevation="hoverElevation" @click="onClickCard">
     <div class="d-flex align-center">
       <div class="pa-2">
         <v-img
@@ -49,6 +49,7 @@ import { BookDetailCardDefine } from '@/components/books/BookDetailCardDefines';
 
 export default defineComponent({
   name: 'BookDetailCard',
+  emits: ['selected-book'],
   props: {
     bookDetails: {
       type: Object as PropType<BookDetailCardDefine>,
@@ -75,7 +76,7 @@ export default defineComponent({
       required: false
     }
   },
-  setup(props) {
+  setup(props, context) {
     const formattedPublishDate = computed(() => {
       if (props.bookDetails.publishDate instanceof Date) {
         return moment(props.bookDetails.publishDate).format('YYYY-MM-DD')
@@ -96,10 +97,16 @@ export default defineComponent({
     })
 
     const hoverElevation = computed(() => props.hover ? 16 : 2)
+
+    const onClickCard = () => {
+      context.emit('selected-book', props.bookDetails.isbn)
+    }
+
     return {
       formattedDescription,
       formattedPublishDate,
-      hoverElevation
+      hoverElevation,
+      onClickCard,
     }
   }
 })
