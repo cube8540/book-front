@@ -5,6 +5,8 @@ import moment from 'moment'
 import { Pagination } from '@/api/pagniation'
 import { AxiosResponse } from "axios"
 
+const baseUrl = '/v1/books'
+
 export interface BookSearchRequest {
     publishFrom?: Date | string | moment.Moment,
     publishTo?: Date | string | moment.Moment,
@@ -16,7 +18,7 @@ export interface BookSearchRequest {
     size?: number
 }
 
-export interface BookSearchResponse {
+export interface BookDetailsResponse {
     isbn: string,
     title: string,
     publishDate: Date,
@@ -30,11 +32,12 @@ export interface BookSearchResponse {
     authors?: Array<string>,
     description?: string,
     price?: number,
+    seriesList?: Array<BookDetailsResponse>,
     createdAt?: Date,
     updatedAt?: Date
 }
 
-export async function search(request: BookSearchRequest): Promise<AxiosResponse<Pagination<BookSearchResponse>>> {
+export async function search(request: BookSearchRequest): Promise<AxiosResponse<Pagination<BookDetailsResponse>>> {
     const requestCopy = { ...request };
 
     if (!requestCopy.direction) {
@@ -53,5 +56,9 @@ export async function search(request: BookSearchRequest): Promise<AxiosResponse<
         requestCopy.publishTo = requestCopy.publishTo.format('YYYYMMDD')
     }
 
-    return http.get<Pagination<BookSearchResponse>>('/v1/books', { params: requestCopy })
+    return http.get<Pagination<BookDetailsResponse>>(baseUrl, { params: requestCopy })
+}
+
+export async function getDetails(isbn: string): Promise<AxiosResponse<BookDetailsResponse>> {
+    return http.get<BookDetailsResponse>(`${baseUrl}/${isbn}`)
 }
