@@ -8,7 +8,18 @@
       </app-month-picker>
     </v-row>
     <v-row align="center" justify="end">
-      <v-col lg="2" cols="4">
+      <v-col
+        v-if="isShowPagination"
+        cols="8"
+        class="d-md-flex d-none justify-center">
+        <v-pagination
+            v-model="selectedPage"
+            :length="fetchedPage.totalPages"
+            @input="onFetchPage"
+        >
+        </v-pagination>
+      </v-col>
+      <v-col md="2" cols="4">
         <v-select
           v-model="selectedPublisherCode"
           label="출판사"
@@ -27,13 +38,20 @@
       :key="content.isbn"
     >
       <v-col cols="12">
-        <book-detail-card :book-details="content">
-        </book-detail-card>
+        <v-hover v-slot="{ hover }">
+          <book-detail-card
+            :hover="hover"
+            :book-details="content"
+            @selected-book="onClickBookDetail"
+          >
+          </book-detail-card>
+        </v-hover>
       </v-col>
     </v-row>
     <v-row v-if="fetchedPage" align="center" justify="center">
-      <v-col cols="12">
+      <v-col lg="12" cols="8">
         <v-pagination
+          v-if="isShowPagination"
           v-model="selectedPage"
           :length="fetchedPage.totalPages"
           @input="onFetchPage"
@@ -41,6 +59,19 @@
         </v-pagination>
       </v-col>
     </v-row>
+    <v-dialog
+      v-model="isShowDetailDialog"
+      width="65%"
+      :fullscreen="$vuetify.breakpoint.mobile"
+      @input="onInputBookDetailViewerDialog"
+    >
+      <book-detail-view-dialog-context
+        v-model="selectedBookIsbn"
+        v-if="isShowDetailDialog"
+        @close="onInputBookDetailViewerDialog(false)"
+      >
+      </book-detail-view-dialog-context>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -49,14 +80,15 @@ import { defineComponent, computed, ComputedRef, ref, Ref, SetupContext } from '
 
 import moment from "moment";
 
-import { searchConditionDefine, extractQueryParams, convertQueryParams } from '@/view/book/BookSearchListPageDefines'
+import { searchConditionDefine, showBookDetailViewerDefine, extractQueryParams, convertQueryParams } from '@/view/book/BookSearchListPageDefines'
 
-import { BookSearchResponse, search } from '@/api/book'
+import { BookDetailsResponse, search } from '@/api/book'
 import { PublisherElement, getAll } from '@/api/publisher'
 import { Pagination } from '@/api/pagniation'
 
 import { BookDetailCardDefine } from '@/components/books/BookDetailCardDefines'
 import BookDetailCard from '@/components/books/BookDetailCard.vue'
+import BookDetailViewDialogContext from "@/view/book/BookDetailViewDialogContext.vue";
 
 import AppMonthPicker from '@/components/pickers/AppMonthPicker.vue'
 
@@ -65,7 +97,7 @@ interface SelectablePublisher {
   name?: string
 }
 
-function convertContent(content: Array<BookSearchResponse> | undefined): Array<BookDetailCardDefine> {
+function convertContent(content: Array<BookDetailsResponse> | undefined): Array<BookDetailCardDefine> {
   if (!content || content.length === 0) {
     return []
   }
@@ -85,6 +117,7 @@ export default defineComponent({
   components: {
     BookDetailCard,
     AppMonthPicker,
+    BookDetailViewDialogContext,
   },
   setup(props, context: SetupContext) {
     const conditionDefine = searchConditionDefine(moment())
@@ -92,19 +125,21 @@ export default defineComponent({
 
     const selectablePublishers: Ref<Array<SelectablePublisher>> = ref([])
 
+    const isShowPagination: ComputedRef<boolean> = computed(() => fetchedContent.value && fetchedContent.value.length > 0)
+
     conditionDefine.selectedPage.value = queryParams.page
     conditionDefine.selectedPublisherCode.value = queryParams.publisherCode
     if (queryParams.yearMonth) {
       conditionDefine.selectedYearMonth.value = queryParams.yearMonth
     }
 
-    const fetchedPage: Ref<Pagination<BookSearchResponse> | undefined> = ref(undefined)
+    const fetchedPage: Ref<Pagination<BookDetailsResponse> | undefined> = ref(undefined)
     const fetchedContent: ComputedRef<Array<BookDetailCardDefine>> =
         computed(() => convertContent(fetchedPage.value?.content))
 
     const pushRouteQuery = () => {
       const queryParams = convertQueryParams(conditionDefine.searchParams.value)
-      context.root.$router.replace({ query: queryParams })
+      context.root.$router.replace({ query: queryParams }).catch(() => {})
     }
 
     const onFetchPage = () => {
@@ -132,11 +167,13 @@ export default defineComponent({
     onFetchPage()
     return {
       ...conditionDefine,
+      ...showBookDetailViewerDefine(),
       fetchedPage,
       fetchedContent,
       selectablePublishers,
+      isShowPagination,
       onFetchPage,
-      onChangeConditionDefine
+      onChangeConditionDefine,
     }
   }
 })
