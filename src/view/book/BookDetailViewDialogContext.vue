@@ -6,11 +6,11 @@
         <v-icon>mdi-close</v-icon>
       </v-btn>
     </v-toolbar>
-    <v-container v-if="bookDetail" fluid>
+    <v-container v-if="bookDetail" fluid class="overflow-y-auto">
       <v-row justify="center">
-        <v-col lg="3" cols="12" align-self="center">
+        <v-col lg="3" cols="12">
           <v-img
-            class="mx-auto"
+            class="mx-auto mt-2"
             :src="bookDetail.largeThumbnail"
             :max-width="maxThumbnailWidth"
             :max-height="maxThumbnailHeight"
@@ -58,7 +58,7 @@
           <v-divider v-if="bookDetail.description"></v-divider>
           <v-card-text v-if="bookDetail.description">
             <div class="grey--text text--darken-2 pa-4 pt-0 pl-0">책소개</div>
-            <div>{{ bookDetail.description }}</div>
+            <div v-html="formattedDescription"></div>
           </v-card-text>
           <v-divider></v-divider>
           <v-card-text>
@@ -143,6 +143,14 @@ export default defineComponent({
       }
     })
 
+    const formattedDescription: ComputedRef<string | undefined> = computed(() => {
+      if (bookDetail.value?.description) {
+        return bookDetail.value?.description.replace(/\n/g, '<br />')
+      } else {
+        return ''
+      }
+    })
+
     const onClickAnotherSeries = (isbn: string) => {
       if (props.value !== isbn) {
         context.emit('input', isbn)
@@ -170,6 +178,7 @@ export default defineComponent({
       bookDetail,
       errorMessage,
       formattedPublishDate,
+      formattedDescription,
       onClickAnotherSeries,
       onClose
     }
@@ -178,9 +187,6 @@ export default defineComponent({
 </script>
 
 <style scoped>
-.book-detail > * {
-  padding-left: 0;
-}
 .another-series > span {
   cursor: pointer;
 }
