@@ -62,6 +62,7 @@
     <v-dialog
       v-model="isShowDetailDialog"
       width="65%"
+      scrollable
       :fullscreen="$vuetify.breakpoint.mobile"
       @input="onInputBookDetailViewerDialog"
     >
