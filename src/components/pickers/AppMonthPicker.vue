@@ -39,57 +39,10 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, Ref, SetupContext } from '@vue/composition-api'
+import { defineComponent, ref, computed, SetupContext } from '@vue/composition-api'
 import moment from 'moment'
 
 const valueRegex = /\d{4}-\d{2}/
-
-interface DataControllerDefine {
-  value: string,
-  emit: any
-}
-
-const dataController = (props: DataControllerDefine) => {
-  const displayPicker: Ref<boolean> = ref(false)
-  const selectedValue: Ref<string> = ref(moment(props.value).format('YYYY-MM'))
-
-  const dateValue = computed(() => moment(selectedValue.value, 'YYYY-MM'))
-  const selectedYear = computed(() => dateValue.value.year())
-  const selectedMonth = computed(() => dateValue.value.month() + 1);
-
-  const onChange = (value: string) => {
-    selectedValue.value = value
-    displayPicker.value = false
-
-    props.emit('input', value)
-  }
-
-  const previous = () => {
-    selectedValue.value = dateValue.value.add(-1, 'month').format('YYYY-MM')
-
-    onChange(selectedValue.value)
-  }
-  const next = () => {
-    selectedValue.value = dateValue.value.add(1, 'month').format('YYYY-MM')
-
-    onChange(selectedValue.value)
-  }
-
-  return { displayPicker, selectedValue, selectedYear, selectedMonth, onChange, previous, next  }
-}
-
-interface StyleControllerDefine {
-  maxWidth: string,
-  fontSize: string,
-  textColor: string
-}
-
-const styleController = (props: StyleControllerDefine) => {
-  const contentStyle = ref(`max-width: ${props.maxWidth}`)
-  const textStyle = ref(`font-size: ${props.fontSize}; color: ${props.textColor}`)
-
-  return { contentStyle, textStyle }
-}
 
 export default defineComponent({
   name: 'AppMonthPicker',
@@ -123,16 +76,37 @@ export default defineComponent({
     }
   },
   setup(props: { value: string, maxWidth: string, fontSize: string, textColor: string, buttonSize: string }, context: SetupContext) {
+    const displayPicker = ref(false)
+    const dateValue = computed(() => moment(props.value, 'YYYY-MM'))
+
+    const selectedValue = computed(() => dateValue.value.format('YYYY-MM'))
+    const selectedYear = computed(() => dateValue.value.year())
+    const selectedMonth = computed(() => dateValue.value.month() + 1);
+
+    const contentStyle = ref(`max-width: ${props.maxWidth}`)
+    const textStyle = ref(`font-size: ${props.fontSize}; color: ${props.textColor}`)
+
+    const onChange = (value: string) => {
+      displayPicker.value = false
+      context.emit('input', value)
+    }
+    const previous = () => {
+      onChange(dateValue.value.add(-1, 'month').format('YYYY-MM'))
+    }
+    const next = () => {
+      onChange(dateValue.value.add(1, 'month').format('YYYY-MM'))
+    }
+
     return {
-      ...dataController({
-        value: props.value,
-        emit: context.emit
-      }),
-      ...styleController({
-        maxWidth: props.maxWidth,
-        fontSize: props.fontSize,
-        textColor: props.textColor
-      })
+      displayPicker,
+      selectedValue,
+      selectedYear,
+      selectedMonth,
+      contentStyle,
+      textStyle,
+      onChange,
+      previous,
+      next,
     }
   }
 })
