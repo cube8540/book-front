@@ -103,7 +103,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, Ref, ref, ComputedRef, computed } from '@vue/composition-api'
+import { defineComponent, Ref, ref, ComputedRef, computed, watch } from '@vue/composition-api'
 
 import moment from "moment";
 import { AxiosResponse } from "axios"
@@ -154,7 +154,6 @@ export default defineComponent({
     const onClickAnotherSeries = (isbn: string) => {
       if (props.value !== isbn) {
         context.emit('input', isbn)
-        fetchDetail(isbn)
       }
     }
 
@@ -172,6 +171,8 @@ export default defineComponent({
     const onClose = () => {
       context.emit('close')
     }
+
+    watch(() => props.value, fetchDetail)
 
     fetchDetail(props.value)
     return {
