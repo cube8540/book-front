@@ -168,7 +168,12 @@ export default defineComponent({
     const pushQueryParamInRouter = (h: string | undefined = undefined): Promise<void> => {
       const query = convertQueryParams(searchParams.value)
       const hash = h !== undefined ? h : context.root.$route.hash
-      return context.root.$router.push({ query, hash })
+
+      return context.root.$router.push({ query, hash }).catch(err => {
+        if (err.name !== 'NavigationDuplicated') {
+          throw err
+        }
+      })
     }
 
     const onChangePageCondition =() => {
