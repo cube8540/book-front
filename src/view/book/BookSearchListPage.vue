@@ -77,18 +77,18 @@
 </template>
 
 <script lang="ts">
-import { computed, ComputedRef, defineComponent, ref, Ref, SetupContext } from '@vue/composition-api'
+import {computed, ComputedRef, defineComponent, ref, Ref, SetupContext} from '@vue/composition-api'
 
-import { SelectablePublisher } from '@/view/book/BookSearchListPageDefines'
-import { extractQueryParams, convertQueryParams, extractHashParams } from "@/view/book/BookSearchListPageUtils";
+import {SelectablePublisher} from '@/view/book/BookSearchListPageDefines'
+import {convertQueryParams, extractHashParams, extractQueryParams} from "@/view/book/BookSearchListPageUtils";
 
 import BookDetailCard from '@/components/books/BookDetailCard.vue'
-import { BookDetailCardDefine } from "@/components/books/BookDetailCardDefines";
+import {BookDetailCardDefine} from "@/components/books/BookDetailCardDefines";
 import AppMonthPicker from '@/components/pickers/AppMonthPicker.vue'
 
-import { BookDetailsResponse, BookSearchRequest, search } from "@/api/book";
-import { getAll } from "@/api/publisher";
-import { Pagination } from "@/api/pagniation";
+import {BookDetailsResponse, BookSearchRequest, search} from "@/api/book";
+import {getAll} from "@/api/publisher";
+import {Pagination} from "@/api/pagniation";
 
 import BookDetailViewDialogContext from "@/view/book/BookDetailViewDialogContext.vue";
 
@@ -151,8 +151,13 @@ export default defineComponent({
 
     const fetchBookList = (): Promise<void> => {
       window.scrollTo(0, 0)
-      return search(searchParams.value)
-          .then(v => fetchedPage.value = v.data)
+      return new Promise<void>(resolve => {
+        search(searchParams.value)
+            .then(v => {
+              fetchedPage.value = v.data
+              resolve()
+            })
+      })
     }
 
     const openBookDetailViewerByHashParams = (writeHistory: boolean = true): Promise<void> => {
@@ -169,15 +174,19 @@ export default defineComponent({
       const query = convertQueryParams(searchParams.value)
       const hash = h !== undefined ? h : context.root.$route.hash
 
-      return context.root.$router.push({ query, hash }).catch(err => {
-        if (err.name !== 'NavigationDuplicated') {
-          throw err
-        }
+      return new Promise<void>(resolve => {
+        context.root.$router.push({query, hash})
+            .then(() => resolve())
+            .catch(err => {
+              if (err.name !== 'NavigationDuplicated') {
+                throw err
+              }
+            })
       })
     }
 
     const onChangePageCondition =() => {
-      fetchBookList().then(openBookDetailViewerByHashParams).then(pushQueryParamInRouter)
+      fetchBookList().then(() => openBookDetailViewerByHashParams()).then(() => pushQueryParamInRouter())
     }
 
     const onChangeConditionDefine = () => {
@@ -214,9 +223,9 @@ export default defineComponent({
     }
 
     window.onpopstate = () => {
-      onPageLoad().then(openBookDetailViewerByHashParams(false))
+      onPageLoad().then(() => openBookDetailViewerByHashParams(false))
     }
-    onPageLoad().then(openBookDetailViewerByHashParams).then(pushQueryParamInRouter)
+    onPageLoad().then(() => openBookDetailViewerByHashParams()).then(() => pushQueryParamInRouter)
     getAll().then(v => {
       const selectable: Array<SelectablePublisher> = [{ code: null, name: '전체' }]
 
