@@ -8,9 +8,9 @@ const router = new VueRouter({
     mode: 'history',
     routes: [{
         path: '/',
-        redirect: '/search'
+        redirect: '/books/search'
     }, {
-        path: '/search',
+        path: '/books/search',
         component: BookSearchListPage
     }]
 })

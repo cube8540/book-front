@@ -11,13 +11,18 @@ export function extractQueryParams(route: Route): BookSearchRequestQueryParams {
     const queryParamMap = {
         page: route.query[searchQueryParamsKey.page],
         publisherCode: route.query[searchQueryParamsKey.publisherCode],
-        yearMonth: route.query[searchQueryParamsKey.yearMonth]
+        yearMonth: route.query[searchQueryParamsKey.yearMonth],
+        title: route.query[searchQueryParamsKey.title]
     }
 
     const result: BookSearchRequestQueryParams = {
         page: undefined,
         yearMonth: undefined,
-        publisherCode: undefined
+        publisherCode: undefined,
+        title: undefined,
+    }
+    if (queryParamMap.title && queryParamMap.title.length > 0) {
+        result.title = queryParamMap.title.toString()
     }
     if (queryParamMap.page && /^\d+$/.test(queryParamMap.page.toString())) {
         result.page = Number(queryParamMap.page)
@@ -27,8 +32,10 @@ export function extractQueryParams(route: Route): BookSearchRequestQueryParams {
     if (queryParamMap.publisherCode) {
         result.publisherCode = queryParamMap.publisherCode.toString()
     }
-    if (queryParamMap.yearMonth && /\d{6}/.test(queryParamMap.yearMonth.toString())) {
-        result.yearMonth = moment(queryParamMap.yearMonth.toString(), 'YYYYMM').format('YYYY-MM')
+    if (!result.title) {
+        if (queryParamMap.yearMonth && /\d{6}/.test(queryParamMap.yearMonth.toString())) {
+            result.yearMonth = moment(queryParamMap.yearMonth.toString(), 'YYYYMM').format('YYYY-MM')
+        }
     }
 
     return result
@@ -55,6 +62,7 @@ export function convertQueryParams(params: BookSearchRequest): QueryParams {
 
     queryParams[searchQueryParamsKey.page] = params.page ? params.page.toString() : undefined
     queryParams[searchQueryParamsKey.publisherCode] = params.publisherCode
+    queryParams[searchQueryParamsKey.title] = params.title
 
     if (moment.isMoment(params.publishFrom)) {
         queryParams[searchQueryParamsKey.yearMonth] = params.publishFrom.format('YYYYMM')

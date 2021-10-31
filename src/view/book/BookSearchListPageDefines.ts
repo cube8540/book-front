@@ -6,7 +6,8 @@ export interface SelectablePublisher {
 export interface BookSearchRequestQueryParams {
     page: number | undefined,
     publisherCode: string | undefined,
-    yearMonth: string | undefined
+    yearMonth: string | undefined,
+    title: string | undefined
 }
 
 export interface BookListPageHashParams {
@@ -16,7 +17,8 @@ export interface BookListPageHashParams {
 export const searchQueryParamsKey = {
     page: 'p',
     publisherCode: 'pub',
-    yearMonth: 'ym'
+    yearMonth: 'ym',
+    title: 'title'
 }
 
 export const hashParamsKey = {

@@ -15,6 +15,7 @@ export interface BookSearchRequest extends PageRequest {
     seriesIsbn?: string,
     seriesCode?: string,
     publisherCode?: string,
+    title?: string,
     direction?: 'ASC' | 'DESC'
 }
 
