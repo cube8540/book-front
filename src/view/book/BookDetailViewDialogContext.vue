@@ -108,7 +108,7 @@ import { defineComponent, Ref, ref, ComputedRef, computed, watch } from '@vue/co
 import moment from "moment";
 import { AxiosResponse } from "axios"
 
-import { BookDetailsResponse, getDetails } from '@/api/book'
+import { BookDetail, getDetails } from '@/api/book'
 
 export default defineComponent({
   name: 'BookDetailViewDialogContext',
@@ -130,7 +130,7 @@ export default defineComponent({
     }
   },
   setup(props, context) {
-    const bookDetail: Ref<BookDetailsResponse | undefined> = ref(undefined)
+    const bookDetail: Ref<BookDetail | undefined> = ref(undefined)
     const errorMessage: Ref<string | undefined> = ref(undefined)
 
     const formattedPublishDate: ComputedRef<string | undefined> = computed(() => {

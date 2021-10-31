@@ -86,7 +86,7 @@ import BookDetailCard from '@/components/books/BookDetailCard.vue'
 import {BookDetailCardDefine} from "@/components/books/BookDetailCardDefines";
 import AppMonthPicker from '@/components/pickers/AppMonthPicker.vue'
 
-import {BookDetailsResponse, BookSearchRequest, search} from "@/api/book";
+import {BookDetail, BookSearchRequest, search} from "@/api/book";
 import {getAll} from "@/api/publisher";
 import {Pagination} from "@/api/pagniation";
 
@@ -94,7 +94,7 @@ import BookDetailViewDialogContext from "@/view/book/BookDetailViewDialogContext
 
 import moment from "moment";
 
-function convertContent(content: Array<BookDetailsResponse> | undefined): Array<BookDetailCardDefine> {
+function convertContent(content: Array<BookDetail> | undefined): Array<BookDetailCardDefine> {
   if (!content || content.length === 0) {
     return []
   }
@@ -135,7 +135,7 @@ export default defineComponent({
       return moment(selectedYearMonth.value, 'YYYY-MM').clone().endOf('month')
     })
 
-    const fetchedPage: Ref<Pagination<BookDetailsResponse> | undefined> = ref(undefined)
+    const fetchedPage: Ref<Pagination<BookDetail> | undefined> = ref(undefined)
 
     const searchParams: ComputedRef<BookSearchRequest> = computed(() => ({
       page: selectedPage.value,
