@@ -9,13 +9,15 @@
         </app-month-picker>
       </v-row>
       <v-row align="center" justify="end">
-        <v-col md="4" xl="3">
+        <v-col md="6" xl="4">
           <v-row>
             <v-col cols="6">
               <v-text-field
                 v-model="searchTitleQuery"
                 label="제목"
+                append-icon="mdi-magnify"
                 @keydown.enter="onChangeConditionDefine"
+                @click:append="onChangeConditionDefine"
               >
               </v-text-field>
             </v-col>

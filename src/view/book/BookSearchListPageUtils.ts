@@ -70,11 +70,3 @@ export function convertQueryParams(params: BookSearchRequest): QueryParams {
 
     return queryParams
 }
-
-export function convertHashParams(params: BookListPageHashParams): string {
-    const hashParams = Object.keys(params)
-        // @ts-ignore
-        .map(k => `${k}=${params[k]}`)
-        .join('&')
-    return hashParams.length > 0 ? `#${hashParams}` : ''
-}
