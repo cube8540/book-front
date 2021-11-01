@@ -46,6 +46,7 @@
             <book-detail-card
               :hover="hover"
               :book-details="content"
+              @selected-book="onClickBookDetail"
             >
             </book-detail-card>
           </v-hover>
@@ -185,6 +186,10 @@ export default defineComponent({
       onChangePageCondition()
     }
 
+    function onClickBookDetail(isbn: string) {
+      context.root.$router.push({ name: 'bookDetail', params: { isbn } })
+    }
+
     getAll().then(v => {
       const selectable: Array<SelectablePublisher> = [{ code: null, name: '전체' }]
 
@@ -215,6 +220,7 @@ export default defineComponent({
       isShowPagination,
       onChangePageCondition,
       onChangeConditionDefine,
+      onClickBookDetail
     }
   },
   beforeUnmount() {
