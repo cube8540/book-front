@@ -2,23 +2,35 @@ import http from '@/api/http'
 
 import moment from 'moment'
 
-import { Pagination } from '@/api/pagniation'
-import { AxiosResponse } from "axios"
+import {PageRequest, Pagination} from '@/api/pagniation'
+import {AxiosResponse} from 'axios'
 
 const baseUrl = '/v1/books'
 
-export interface BookSearchRequest {
+const summaryUrl = baseUrl + '/summaries'
+
+export interface BookSearchRequest extends PageRequest {
     publishFrom?: Date | string | moment.Moment,
     publishTo?: Date | string | moment.Moment,
     seriesIsbn?: string,
     seriesCode?: string,
     publisherCode?: string,
-    direction?: 'ASC' | 'DESC',
-    page?: number,
-    size?: number
+    title?: string,
+    direction?: 'ASC' | 'DESC'
 }
 
-export interface BookDetailsResponse {
+export enum ExternalSite {
+    KYOBO = 'KYOBO',
+    ALADIN = 'ALADIN'
+}
+
+export interface BookExternalLink {
+    productDetailPage: string,
+    originalPrice?: number,
+    salePrice?: number
+}
+
+export interface BookDetail {
     isbn: string,
     title: string,
     publishDate: Date,
@@ -32,12 +44,24 @@ export interface BookDetailsResponse {
     authors?: Array<string>,
     description?: string,
     price?: number,
-    seriesList?: Array<BookDetailsResponse>,
+    seriesList?: Array<BookDetail>,
+    indexes?: Array<String>,
+    externalLinks?: Record<ExternalSite, BookExternalLink>,
     createdAt?: Date,
     updatedAt?: Date
 }
 
-export async function search(request: BookSearchRequest): Promise<AxiosResponse<Pagination<BookDetailsResponse>>> {
+export interface SummaryBookStatus {
+    newestBooks?: Array<BookDetail>,
+    latestUpdate?: Array<BookDetail>,
+    publishedToday?: Array<BookDetail>
+}
+
+export async function summaries(): Promise<AxiosResponse<SummaryBookStatus>> {
+    return http.get<SummaryBookStatus>(summaryUrl)
+}
+
+export async function search(request: BookSearchRequest): Promise<AxiosResponse<Pagination<BookDetail>>> {
     const requestCopy = { ...request };
 
     if (!requestCopy.direction) {
@@ -56,9 +80,9 @@ export async function search(request: BookSearchRequest): Promise<AxiosResponse<
         requestCopy.publishTo = requestCopy.publishTo.format('YYYYMMDD')
     }
 
-    return http.get<Pagination<BookDetailsResponse>>(baseUrl, { params: requestCopy })
+    return http.get<Pagination<BookDetail>>(baseUrl, { params: requestCopy })
 }
 
-export async function getDetails(isbn: string): Promise<AxiosResponse<BookDetailsResponse>> {
-    return http.get<BookDetailsResponse>(`${baseUrl}/${isbn}`)
+export async function getDetails(isbn: string): Promise<AxiosResponse<BookDetail>> {
+    return http.get<BookDetail>(`${baseUrl}/${isbn}`)
 }

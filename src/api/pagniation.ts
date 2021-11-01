@@ -1,3 +1,8 @@
+export interface PageRequest {
+    page?: number,
+    size?: number
+}
+
 export interface Sort {
     sorted: boolean,
     unsorted: boolean,
