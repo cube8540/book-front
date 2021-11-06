@@ -1,5 +1,5 @@
 <template>
-  <v-card :elevation="hoverElevation" @click="onClickCard" :href="bookDetailLink">
+  <v-card :elevation="hoverElevation" @click="onClickCard">
     <div class="d-flex align-center">
       <div class="pa-2">
         <v-img
@@ -101,7 +101,7 @@ export default defineComponent({
     const hoverElevation = computed(() => props.hover ? 16 : 2)
 
     const onClickCard = () => {
-      context.emit('selected-book', props.bookDetails.isbn)
+      context.root.$router.push({ name: 'bookDetail', params: { isbn: props.bookDetails.isbn } })
     }
 
     return {
