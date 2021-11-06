@@ -1,11 +1,16 @@
-import { Route } from "vue-router";
+import {Route} from "vue-router";
 
 import moment from "moment";
 
-import { BookSearchRequest } from "@/api/book";
+import {BookSearchRequest} from "@/api/book";
 
-import { QueryParams } from "@/view/QueryParams";
-import { BookListPageHashParams, BookSearchRequestQueryParams, searchQueryParamsKey, hashParamsKey } from "@/view/book/BookSearchListPageDefines";
+import {QueryParams} from "@/view/QueryParams";
+import {
+    BookListPageHashParams,
+    BookSearchRequestQueryParams,
+    hashParamsKey,
+    searchQueryParamsKey
+} from "@/view/book/BookSearchListPageDefines";
 
 export function extractQueryParams(route: Route): BookSearchRequestQueryParams {
     const queryParamMap = {
@@ -25,7 +30,7 @@ export function extractQueryParams(route: Route): BookSearchRequestQueryParams {
         result.title = queryParamMap.title.toString()
     }
     if (queryParamMap.page && /^\d+$/.test(queryParamMap.page.toString())) {
-        result.page = Number(queryParamMap.page)
+        result.page = Math.max(Number(queryParamMap.page), 1)
     } else {
         result.page = 1
     }

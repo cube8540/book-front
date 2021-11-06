@@ -130,7 +130,7 @@ export default defineComponent({
     const searchParams: ComputedRef<BookSearchRequest> = computed(() => ({
         page: selectedPage.value,
         size: selectedSize.value,
-        title: searchTitleQuery.value,
+        title: (searchTitleQuery.value ? searchTitleQuery.value : undefined),
         publisherCode: selectedPublisherCode.value,
         publishFrom: !searchTitleQuery.value ? publishFrom.value : undefined,
         publishTo: !searchTitleQuery.value ? publishTo.value : undefined
