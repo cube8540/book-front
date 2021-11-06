@@ -1,6 +1,6 @@
 <template>
   <v-layout v-if="bookDetail" column>
-    <v-flex class="context-detail-box pa-10">
+    <v-flex class="context-detail-box" :class="{ 'pa-10': $vuetify.breakpoint.mdAndUp }">
       <v-container>
         <v-layout row>
           <v-flex md3>
@@ -55,6 +55,18 @@
         </v-layout>
       </v-container>
     </v-flex>
+    <v-flex class="context-detail-box pa-10" v-if="hasDescription">
+      <v-container>
+        <v-row align="center">
+          <v-divider></v-divider>
+          <span class="pl-10 pr-10">책 소개</span>
+          <v-divider></v-divider>
+        </v-row>
+      </v-container>
+    </v-flex>
+    <v-flex class="context-detail-box pa-10" v-if="hasDescription">
+      <v-container v-html="formattedDescription"></v-container>
+    </v-flex>
     <v-flex class="context-detail-box pa-10" v-if="hasSeries">
       <v-container>
         <v-row align="center">
@@ -68,18 +80,18 @@
       <v-container>
         <v-row class="flex-wrap" justify="start">
           <v-col
-            v-for="(series, index) in bookDetail.seriesList"
-            cols="3"
-            :key="series.isbn + '_series_' + index"
+              v-for="(series, index) in bookDetail.seriesList"
+              cols="3"
+              :key="series.isbn + '_series_' + index"
           >
             <v-tooltip bottom>
               <template v-slot:activator="{ on }">
                 <router-link
-                  v-on="{ ...on }"
-                  :to="{ name: 'bookDetail', params: { isbn: series.isbn } }"
-                  class="text-decoration-none grey--text text--darken-3"
-                  :class="{ 'font-weight-bold': isbn === series.isbn }"
-                  @click.native="scrollToTop"
+                    v-on="{ ...on }"
+                    :to="{ name: 'bookDetail', params: { isbn: series.isbn } }"
+                    class="text-decoration-none grey--text text--darken-3"
+                    :class="{ 'font-weight-bold': isbn === series.isbn }"
+                    @click.native="scrollToTop"
                 >
                   {{ series.title }}
                 </router-link>
@@ -89,18 +101,6 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-flex>
-    <v-flex class="context-detail-box pa-10" v-if="hasDescription">
-      <v-container>
-        <v-row align="center">
-          <v-divider></v-divider>
-          <span class="pl-10 pr-10">책 소개</span>
-          <v-divider></v-divider>
-        </v-row>
-      </v-container>
-    </v-flex>
-    <v-flex class="context-detail-box pa-10" v-if="hasDescription">
-      <v-container v-html="formattedDescription"></v-container>
     </v-flex>
     <v-flex class="context-detail-box pa-10" v-if="hasIndexes">
       <v-container>
