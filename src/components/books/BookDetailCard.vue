@@ -1,5 +1,5 @@
 <template>
-  <v-card :elevation="hoverElevation" @click="onClickCard">
+  <v-card :elevation="hoverElevation" @click="onClickCard" :href="bookDetailLink">
     <div class="d-flex align-center">
       <div class="pa-2">
         <v-img
@@ -96,6 +96,8 @@ export default defineComponent({
       }
     })
 
+    const bookDetailLink = computed(() => `/books/${props.bookDetails.isbn}`)
+
     const hoverElevation = computed(() => props.hover ? 16 : 2)
 
     const onClickCard = () => {
@@ -105,6 +107,7 @@ export default defineComponent({
     return {
       formattedDescription,
       formattedPublishDate,
+      bookDetailLink,
       hoverElevation,
       onClickCard,
     }
