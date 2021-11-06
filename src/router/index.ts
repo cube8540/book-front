@@ -9,6 +9,7 @@ const router = new VueRouter({
     mode: 'history',
     routes: [{
         path: '/',
+        name: 'home',
         redirect: '/books/search'
     }, {
         path: '/books/search',
