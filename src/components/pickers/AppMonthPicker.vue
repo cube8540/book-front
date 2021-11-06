@@ -20,7 +20,7 @@
             </div>
           </template>
           <v-date-picker
-            v-model="selectedValue"
+            v-model="initialize"
             type="month"
             no-title
             scrollable
@@ -39,7 +39,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, SetupContext } from '@vue/composition-api'
+import {computed, defineComponent, ref, SetupContext} from '@vue/composition-api'
 import moment from 'moment'
 
 const valueRegex = /\d{4}-\d{2}/
@@ -77,9 +77,9 @@ export default defineComponent({
   },
   setup(props: { value: string, maxWidth: string, fontSize: string, textColor: string, buttonSize: string }, context: SetupContext) {
     const displayPicker = ref(false)
-    const dateValue = computed(() => moment(props.value, 'YYYY-MM'))
+    const initialize = ref(props.value)
 
-    const selectedValue = computed(() => dateValue.value.format('YYYY-MM'))
+    const dateValue = computed(() => moment(props.value, 'YYYY-MM'))
     const selectedYear = computed(() => dateValue.value.year())
     const selectedMonth = computed(() => dateValue.value.month() + 1);
 
@@ -99,7 +99,7 @@ export default defineComponent({
 
     return {
       displayPicker,
-      selectedValue,
+      initialize,
       selectedYear,
       selectedMonth,
       contentStyle,

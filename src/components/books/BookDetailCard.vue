@@ -96,15 +96,18 @@ export default defineComponent({
       }
     })
 
+    const bookDetailLink = computed(() => `/books/${props.bookDetails.isbn}`)
+
     const hoverElevation = computed(() => props.hover ? 16 : 2)
 
     const onClickCard = () => {
-      context.emit('selected-book', props.bookDetails.isbn)
+      context.root.$router.push({ name: 'bookDetail', params: { isbn: props.bookDetails.isbn } })
     }
 
     return {
       formattedDescription,
       formattedPublishDate,
+      bookDetailLink,
       hoverElevation,
       onClickCard,
     }
