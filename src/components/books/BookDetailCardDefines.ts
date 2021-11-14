@@ -7,5 +7,6 @@ export interface BookDetailCardDefine {
     publishDate: Date | moment.Moment | string,
     thumbnail?: string,
     description?: string,
-    authors?: Array<string>
+    authors?: Array<string>,
+    confirmedPublication?: boolean
 }
