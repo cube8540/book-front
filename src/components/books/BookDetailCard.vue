@@ -23,7 +23,11 @@
         </v-img>
       </div>
       <div class="align-self-stretch">
-        <v-card-title>{{ bookDetails.title }}</v-card-title>
+        <v-card-title
+          :class="{ 'grey--text': !bookDetails.confirmedPublication, 'text-darken-2': !bookDetails.confirmedPublication }"
+        >
+          {{ bookDetails.title }}
+        </v-card-title>
         <v-card-subtitle class="d-flex">
           <span>
             {{ bookDetails.publisher }}
