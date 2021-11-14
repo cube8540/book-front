@@ -93,7 +93,8 @@ function convertContent(content: Array<BookDetail> | undefined): Array<BookDetai
     authors: v.authors,
     publishDate: v.publishDate,
     thumbnail: v.mediumThumbnail,
-    description: v.description
+    description: v.description,
+    confirmedPublication: v.confirmedPublication
   }))
 }
 

@@ -47,6 +47,7 @@ export interface BookDetail {
     seriesList?: Array<BookDetail>,
     indexes?: Array<String>,
     externalLinks?: Record<ExternalSite, BookExternalLink>,
+    confirmedPublication?: boolean,
     createdAt?: Date,
     updatedAt?: Date
 }
