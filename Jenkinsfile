@@ -12,7 +12,7 @@ pipeline {
                 sh 'npm install'
                 sh 'npm run build-${ACTIVE_PROFILE}'
                 script {
-                    buildVersion = sh(script: 'node -p "console.log(require(\'./package.json\').version);"', returnStdout: true)
+                    buildVersion = sh(script: 'node -p "require(\'./package.json\').version"', returnStdout: true)
                 }
             }
         }
