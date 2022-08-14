@@ -6,7 +6,7 @@
     "serve": "vue-cli-service serve --mode localhost",
     "build-local": "vue-cli-service build --mode localhost",
     "build-dev": "vue-cli-service build --mode dev",
-    "build-test": "vue-cli-service build --mode testdev",
+    "build-testdev": "vue-cli-service build --mode testdev",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
