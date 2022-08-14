@@ -10,8 +10,6 @@ pipeline {
         stage('Node build') {
             steps {
                 sh 'npm install'
-            }
-            steps {
                 sh 'npm run build-${ACTIVE_PROFILE}'
                 script {
                     buildVersion = sh(script: 'node -e "console.log(require(\'./package.json\').version);"', returnStdout: true)
