@@ -12,7 +12,7 @@ pipeline {
                 sh 'npm install'
                 sh 'npm run build-${ACTIVE_PROFILE}'
                 script {
-                    buildVersion = sh(script: 'node -e "console.log(require(\'./package.json\').version);"', returnStdout: true)
+                    buildVersion = sh(script: 'node -p "console.log(require(\'./package.json\').version);"', returnStdout: true)
                 }
             }
         }
@@ -20,7 +20,7 @@ pipeline {
             steps {
                 script {
                     echo "buildVersion=${buildVersion}"
-                    app = docker.build("book-front:${buildVersion}", "-t book-front:latest --build-arg V_VERSION=${buildVersion} --build-arg V_PROFILE=$ACTIVE_PROFILE .")
+                    app = docker.build("book-front:${buildVersion}", "-t book-front:latest .")
                 }
             }
         }
