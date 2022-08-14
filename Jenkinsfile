@@ -3,7 +3,7 @@ pipeline {
     stages {
         stage('Setup profile') {
             steps {
-                sh 'cp ${CONFIG_LOCATION}/*.conf dist'
+                sh 'cp ${CONFIG_LOCATION}/*.conf .'
                 sh 'cp ${CONFIG_LOCATION}/.env.* .'
             }
         }
